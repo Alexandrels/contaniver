@@ -260,29 +260,24 @@
 
             if (!year || !month || !day) return;
 
-            // Usa valores do input para evitar deslocamento de data por fuso horário.
-            const currentYearBdayStart = new Date(now.getFullYear(), month - 1, day, 0, 0, 0, 0);
-            const currentYearBdayEnd = new Date(now.getFullYear(), month - 1, day, 23, 59, 59, 999);
-            const isBirthdayToday = now >= currentYearBdayStart && now <= currentYearBdayEnd;
-            const hasPassedThisYear = now > currentYearBdayEnd;
+            // Usa a data completa informada (dia, mês e ano) em horário local.
+            const selectedDateStart = new Date(year, month - 1, day, 0, 0, 0, 0);
+            const selectedDateEnd = new Date(year, month - 1, day, 23, 59, 59, 999);
+            const isBirthdayToday = now >= selectedDateStart && now <= selectedDateEnd;
 
-            let targetDate;
+            let diff = 0;
 
             if (isBirthdayToday) {
                 // Conta o tempo restante do dia de aniversário até virar o próximo dia.
-                targetDate = new Date(currentYearBdayEnd.getTime() + 1);
+                diff = selectedDateEnd.getTime() + 1 - now.getTime();
+            } else if (now < selectedDateStart) {
+                diff = selectedDateStart.getTime() - now.getTime();
+                messageDisplay.innerText = "Seu proximo aniversaria é:";
             } else {
-                targetDate = new Date(currentYearBdayStart);
-
-                if (hasPassedThisYear) {
-                    targetDate.setFullYear(now.getFullYear() + 1);
-                    messageDisplay.innerText = "Seu aniversário deste ano já passou. Contagem para o próximo:";
-                } else {
-                    messageDisplay.innerText = "Falta pouco para o grande dia!";
-                }
+                messageDisplay.innerText = "Niver já passou";
             }
 
-            const diff = Math.max(0, targetDate - now);
+            diff = Math.max(0, diff);
 
             // Cálculo matemático do tempo
             const d = Math.floor(diff / (1000 * 60 * 60 * 24));
@@ -297,7 +292,7 @@
             document.getElementById('seconds').innerText = String(s).padStart(2, '0');
 
             if (isBirthdayToday) {
-                messageDisplay.innerText = `🎉 É hoje! Faltam ${h} hora(s), ${m} minuto(s) e ${s} segundo(s) para terminar seu aniversário.`;
+                messageDisplay.innerText = "Hoje é seu aniversario";
             }
         }
 

@@ -272,9 +272,9 @@
                 diff = selectedDateEnd.getTime() + 1 - now.getTime();
             } else if (now < selectedDateStart) {
                 diff = selectedDateStart.getTime() - now.getTime();
-                messageDisplay.innerText = "Seu proximo aniversaria é:";
+                messageDisplay.innerText = "Seu proximo aniversário";
             } else {
-                messageDisplay.innerText = "Niver já passou";
+                messageDisplay.innerText = "Seu aniversário já passou";
             }
 
             diff = Math.max(0, diff);
